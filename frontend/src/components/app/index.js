@@ -18,10 +18,10 @@ export default class App {
            .link((node.data && node.data.url))
       // node.data holds custom object passed to graph.addNode();
       })
-      /*.placeNode(function(nodeUI, pos){
+      .placeNode(function(nodeUI, pos, node){
           // Shift image to let links go to the center:
-          nodeUI.attr('x', pos.x - 12).attr('y', pos.y - 12);
-      })*/;
+          nodeUI.attr('x', pos.x - 0.5 * node.data["size"]).attr('y', pos.y - 0.5 * node.data["size"]);
+      });
   }
   
   addNodesToGraph (root_user, followers, graph) {
@@ -37,31 +37,39 @@ export default class App {
       if (!graph.getNode(person["login"])) {
         graph.addNode(person["login"], getDataFromPerson(person))
       }
-      graph.addLink(root_user["login"], person["login"]);
+//      graph.addLink(root_user["login"], person["login"]);
           if (person["followers"] !== undefined) {
             this.addNodesToGraph(person, person["followers"], graph)
           }
     }
   }
 
+  addLinkstoGraph(root_user, followers, graph) {
+     for (const person of followers) {
+        graph.addLink(root_user["login"], person["login"]);
+        if (person["followers"] !== undefined) {
+            this.addLinkstoGraph(person, person["followers"], graph)
+        }
+     }
+  }
+
   render (root_user, followers) {
     const graph = Viva.Graph.graph()
     this.addNodesToGraph(root_user, followers, graph)
-    
     const layout = Viva.Graph.Layout.forceDirected(graph, {
       springLength : followers && followers.length * 2 || 200,
       springCoeff : 0.00001,
       dragCoeff : 0.002,
       gravity : -12.5
     });
+//    graph.forEachNode(function (node) {
+//      // layout here is instance of Viva.Graph.Layout.forceDirected or Viva.Graph.Layout.constant:
+//      var position = layout.getNodePosition(node.id);
+//      position.x += -0.5 * node.data["size"];
+//      position.y += -0.5 * node.data["size"];
+//    });
 
-    graph.forEachNode(function (node) {
-      // layout here is instance of Viva.Graph.Layout.forceDirected or Viva.Graph.Layout.constant:
-      var position = layout.getNodePosition(node.id);
-      position.x += -0.5 * node.data["size"];
-      position.y += -0.5 * node.data["size"];
-    });
-
+    this.addLinkstoGraph(root_user, followers, graph)
 
     const renderer = Viva.Graph.View.renderer(graph, {
       container: document.querySelector(".graph-container"),

@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     URL_PREFIX: str = '/api/v1'
 
     # НЕЛЬЗЯ ЗАПУШИТЬ ЭТОТ ИЛИ ДРУГИЕ ТОКЕНЫ НА ГИТХАБ. ДОБАВЬТЕ config.py в gitignore!
-    GITHUB_API_TOKEN: str = "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"
-
+    # GITHUB_API_TOKEN: str = "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"
+    GITHUB_API_TOKEN: str = "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"
 
 settings = Settings()
