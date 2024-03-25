@@ -1,6 +1,6 @@
 # api_mini_lab_3 (assignment type 3)
 
-*[Postman workspace link]([https://www.postman.com/](https://www.postman.com/spacecraft-participant-90054820/workspace/labs-workspace))
+*[Postman workspace link](https://www.postman.com/spacecraft-participant-90054820/workspace/labs-workspace)
 
 ## Changes 
 1. Genrated authorization token
